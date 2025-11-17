@@ -1,23 +1,26 @@
-# main.py
-from typing import Optional
-
 from fastapi import FastAPI, Request, Depends, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from database import engine, Base, get_db
+from database import engine, Base, get_db, test_connection, init_db
 from models import Project, Client, Contact, Subscriber
 
-# Create tables
-Base.metadata.create_all(bind=engine)
-
-app = FastAPI(title="PixelCraft Studio")
+app = FastAPI()
 
 # Static & templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+
+
+# ---- Run when app starts (Render + local) ---- #
+@app.on_event("startup")
+def on_startup():
+    # Optional: test DB and create tables
+    if test_connection():
+        init_db()
+    
 
 
 # ---------------------- PUBLIC ROUTES (Landing) ---------------------- #
@@ -26,8 +29,8 @@ templates = Jinja2Templates(directory="templates")
 def landing(
     request: Request,
     db: Session = Depends(get_db),
-    message: Optional[str] = None,
-    error: Optional[str] = None,
+    message: str | None = None,
+    error: str | None = None
 ):
     projects = db.query(Project).all()
     clients = db.query(Client).all()
@@ -52,7 +55,6 @@ def submit_contact(
     city: str = Form(...),
     db: Session = Depends(get_db),
 ):
-    # Basic validation (server side)
     if not (full_name and email and mobile and city):
         url = app.url_path_for("landing") + "?error=Please+fill+all+fields"
         return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
@@ -65,7 +67,6 @@ def submit_contact(
     )
     db.add(contact)
     db.commit()
-
     url = app.url_path_for("landing") + "?message=Thank+you!+We+will+contact+you+soon."
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
 
@@ -88,44 +89,22 @@ def subscribe(
     sub = Subscriber(email=email)
     db.add(sub)
     db.commit()
-
     url = app.url_path_for("landing") + "?message=Subscribed+successfully!"
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
 
 
 # ---------------------- ADMIN ROUTES ---------------------- #
-# NOTE: No authentication here for simplicity (assignment usually doesn’t require).
-# You can add auth with a simple login later if needed.
-
 
 @app.get("/admin")
 def admin_dashboard(request: Request, db: Session = Depends(get_db)):
-    """
-    Single admin dashboard page that shows:
-    - Summary counts
-    - All projects
-    - All clients
-    - Latest 10 contacts
-    - Latest 10 subscribers
-    """
-    projects = db.query(Project).all()
-    clients = db.query(Client).all()
-    contacts = db.query(Contact).order_by(Contact.created_at.desc()).limit(10).all()
-    subscribers = db.query(Subscriber).order_by(Subscriber.created_at.desc()).limit(10).all()
-
-    total_projects = len(projects)
-    total_clients = len(clients)
+    total_projects = db.query(Project).count()
+    total_clients = db.query(Client).count()
     total_contacts = db.query(Contact).count()
     total_subscribers = db.query(Subscriber).count()
-
     return templates.TemplateResponse(
         "admin_dashboard.html",
         {
             "request": request,
-            "projects": projects,
-            "clients": clients,
-            "contacts": contacts,
-            "subscribers": subscribers,
             "total_projects": total_projects,
             "total_clients": total_clients,
             "total_contacts": total_contacts,
@@ -167,16 +146,13 @@ def admin_project_create(
     p = Project(name=name, description=description, image_url=image_url or None)
     db.add(p)
     db.commit()
-
     url = app.url_path_for("admin_projects")
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
 
 
 @app.get("/admin/projects/{project_id}/edit")
 def admin_project_edit_form(
-    request: Request,
-    project_id: int,
-    db: Session = Depends(get_db),
+    request: Request, project_id: int, db: Session = Depends(get_db)
 ):
     project = db.query(Project).get(project_id)
     if not project:
@@ -207,22 +183,18 @@ def admin_project_edit(
     project.description = description
     project.image_url = image_url or None
     db.commit()
-
     url = app.url_path_for("admin_projects")
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
 
 
 @app.post("/admin/projects/{project_id}/delete")
 def admin_project_delete(
-    request: Request,
-    project_id: int,
-    db: Session = Depends(get_db),
+    request: Request, project_id: int, db: Session = Depends(get_db)
 ):
     project = db.query(Project).get(project_id)
     if project:
         db.delete(project)
         db.commit()
-
     url = app.url_path_for("admin_projects")
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
 
@@ -267,16 +239,13 @@ def admin_client_create(
     )
     db.add(c)
     db.commit()
-
     url = app.url_path_for("admin_clients")
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
 
 
 @app.get("/admin/clients/{client_id}/edit")
 def admin_client_edit_form(
-    request: Request,
-    client_id: int,
-    db: Session = Depends(get_db),
+    request: Request, client_id: int, db: Session = Depends(get_db)
 ):
     client = db.query(Client).get(client_id)
     if not client:
@@ -309,22 +278,18 @@ def admin_client_edit(
     client.description = description or None
     client.image_url = image_url or None
     db.commit()
-
     url = app.url_path_for("admin_clients")
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
 
 
 @app.post("/admin/clients/{client_id}/delete")
 def admin_client_delete(
-    request: Request,
-    client_id: int,
-    db: Session = Depends(get_db),
+    request: Request, client_id: int, db: Session = Depends(get_db)
 ):
     client = db.query(Client).get(client_id)
     if client:
         db.delete(client)
         db.commit()
-
     url = app.url_path_for("admin_clients")
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
 
