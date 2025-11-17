@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block title %}PixelCraft Studio{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- Hero -->
+  <section class="py-5 hero-section">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h1 class="display-5 hero-title">PixelCraft Studio</h1>
+        <p class="lead text-muted">
+          We design and build modern digital products that your customers will love.
+        </p>
+        <a href="#projects" class="btn btn-primary btn-lg hero-cta me-2">View Projects</a>
+        <a href="#contact" class="btn btn-outline-primary btn-lg hero-cta-secondary">Contact Us</a>
+      </div>
+      <div class="col-md-6 text-center d-none d-md-block">
+        <div class="hero-illustration">
+          <img src="{{ url_for('static', path='images/hero-illustration.svg') if false else '' }}" alt="" />
+          <div class="hero-placeholder">
+            <span>Showcase your brand with style</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="py-4">
+    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Our Projects</h2>
+      <span class="section-subtitle">Hand-picked work we’re proud of</span>
+    </div>
+
+    <div class="scroll-row-wrapper">
+      <button class="scroll-arrow left" data-target="projects-scroll">
+        <span>&lsaquo;</span>
+      </button>
+
+      <div class="horizontal-scroll" id="projects-scroll">
+        {% for project in projects %}
+          <div class="card h-100 project-card scroll-card">
+            {% if project.image_url %}
+              <img src="{{ project.image_url }}" class="card-img-top" alt="{{ project.name }}">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ project.name }}</h5>
+              <p class="card-text">{{ project.description }}</p>
+              <button class="btn btn-outline-primary btn-sm">Details</button>
+            </div>
+          </div>
+        {% else %}
+          <p>No projects added yet.</p>
+        {% endfor %}
+      </div>
+
+      <button class="scroll-arrow right" data-target="projects-scroll">
+        <span>&rsaquo;</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Happy Clients -->
+  <section id="clients" class="py-4">
+    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Happy Clients</h2>
+      <span class="section-subtitle">Brands that trust our work</span>
+    </div>
+
+    <div class="scroll-row-wrapper">
+      <button class="scroll-arrow left" data-target="clients-scroll">
+        <span>&lsaquo;</span>
+      </button>
+
+      <div class="horizontal-scroll" id="clients-scroll">
+        {% for client in clients %}
+          <div class="card h-100 text-center client-card p-4 scroll-card">
+            {% if client.image_url %}
+              <div class="client-avatar-wrapper mx-auto mb-3">
+                <img src="{{ client.image_url }}"
+                     class="client-avatar"
+                     alt="{{ client.name }}">
+              </div>
+            {% endif %}
+
+            <div class="card-body">
+              <h5 class="card-title">{{ client.name }}</h5>
+              {% if client.designation %}
+                <h6 class="card-subtitle mb-2 text-muted">{{ client.designation }}</h6>
+              {% endif %}
+              <p class="card-text">{{ client.description }}</p>
+            </div>
+          </div>
+        {% else %}
+          <p>No clients added yet.</p>
+        {% endfor %}
+      </div>
+
+      <button class="scroll-arrow right" data-target="clients-scroll">
+        <span>&rsaquo;</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Contact + Newsletter -->
+  <section id="contact" class="py-5">
+    <div class="row g-4">
+      <!-- Contact Form -->
+      <div class="col-md-7">
+        <div class="card contact-card shadow-sm">
+          <div class="card-body">
+            <h3 class="card-title mb-3">Let’s build something together</h3>
+            <p class="text-muted mb-4">
+              Share your details and we’ll get in touch to discuss your project or collaboration.
+            </p>
+
+            <form method="post" action="{{ url_for('submit_contact') }}" class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="full_name" class="form-control" placeholder="Enter your name" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Mobile Number</label>
+                <input type="text" name="mobile" class="form-control" placeholder="+91 98765 43210" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">City</label>
+                <input type="text" name="city" class="form-control" placeholder="Your city" required>
+              </div>
+
+              <!-- NOTE: backend still uses same fields; we’re just styling better -->
+
+              <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary px-4">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="col-md-5">
+        <div class="card newsletter-card shadow-sm">
+          <div class="card-body">
+            <h4 class="card-title mb-3">Stay in the loop</h4>
+            <p class="text-muted">
+              Subscribe to our newsletter to receive updates on new projects, tips, and design insights.
+            </p>
+
+            <form method="post" action="{{ url_for('subscribe') }}" class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-outline-primary w-100">Subscribe</button>
+              </div>
+            </form>
+
+            <div class="small text-muted mt-2">
+              We respect your privacy. No spam, ever.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

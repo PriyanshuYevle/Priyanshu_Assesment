@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container admin-dashboard">
+
+  <!-- Projects Section -->
+  <section class="admin-section">
+    <div class="admin-section-card">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h3 class="mb-0">Projects</h3>
+        <a href="{{ url_for('admin_project_create_form') }}" class="btn btn-sm admin-btn">Add Project</a>
+      </div>
+      <p class="text-muted small mb-3">All projects currently visible on the landing page.</p>
+
+      <table class="table table-striped admin-table mb-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th style="width: 150px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for project in projects %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td class="text-center">
+                {% if project.image_url %}
+                  {% set img = project.image_url %}
+                  {% if img.startswith('http://') or img.startswith('https://') %}
+                    <img src="{{ img }}" class="admin-thumb" alt="project image">
+                  {% else %}
+                    <img src="/{{ img.lstrip('/') }}" class="admin-thumb" alt="project image">
+                  {% endif %}
+                {% else %}
+                  <span class="text-muted small">No Image</span>
+                {% endif %}
+              </td>
+              <td>{{ project.name }}</td>
+              <td>
+                {{ project.description[:60] }}
+                {% if project.description and project.description|length > 60 %}...{% endif %}
+              </td>
+              <td>
+                <a href="{{ url_for('admin_project_edit_form', project_id=project.id) }}"
+                   class="btn btn-edit btn-sm mb-1">Edit</a>
+                <form method="post"
+                      action="{{ url_for('admin_project_delete', project_id=project.id) }}"
+                      style="display:inline-block"
+                      onsubmit="return confirm('Delete this project?');">
+                  <button class="btn btn-delete btn-sm">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% else %}
+            <tr><td colspan="5" class="text-center text-muted">No projects found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Clients Section -->
+  <section class="admin-section">
+    <div class="admin-section-card">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h3 class="mb-0">Clients</h3>
+        <a href="{{ url_for('admin_client_create_form') }}" class="btn btn-sm admin-btn">Add Client</a>
+      </div>
+      <p class="text-muted small mb-3">These clients are shown as testimonials on the landing page.</p>
+
+      <table class="table table-striped admin-table mb-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Designation</th>
+            <th>Description</th>
+            <th style="width: 150px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for client in clients %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td class="text-center">
+                {% if client.image_url %}
+                  {% set img = client.image_url %}
+                  {% if img.startswith('http://') or img.startswith('https://') %}
+                    <img src="{{ img }}" class="admin-thumb-circle" alt="client image">
+                  {% else %}
+                    <img src="/{{ img.lstrip('/') }}" class="admin-thumb-circle" alt="client image">
+                  {% endif %}
+                {% else %}
+                  <span class="text-muted small">No Image</span>
+                {% endif %}
+              </td>
+              <td>{{ client.name }}</td>
+              <td>{{ client.designation }}</td>
+              <td>
+                {{ client.description[:60] if client.description }}
+                {% if client.description and client.description|length > 60 %}...{% endif %}
+              </td>
+              <td>
+                <a href="{{ url_for('admin_client_edit_form', client_id=client.id) }}"
+                   class="btn btn-edit btn-sm mb-1">Edit</a>
+                <form method="post"
+                      action="{{ url_for('admin_client_delete', client_id=client.id) }}"
+                      style="display:inline-block"
+                      onsubmit="return confirm('Delete this client?');">
+                  <button class="btn btn-delete btn-sm">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% else %}
+            <tr><td colspan="6" class="text-center text-muted">No clients found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Contacts Section -->
+  <section class="admin-section">
+    <div class="admin-section-card">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h3 class="mb-0">Latest Contacts</h3>
+        <a href="{{ url_for('admin_contacts') }}" class="btn btn-sm admin-btn">View All Contacts</a>
+      </div>
+      <p class="text-muted small mb-3">Most recent visitors who submitted the contact form.</p>
+
+      <table class="table table-striped admin-table mb-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>City</th>
+            <th>Submitted At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in contacts %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ c.full_name }}</td>
+              <td>{{ c.email }}</td>
+              <td>{{ c.mobile }}</td>
+              <td>{{ c.city }}</td>
+              <td>{{ c.created_at }}</td>
+            </tr>
+          {% else %}
+            <tr><td colspan="6" class="text-center text-muted">No contacts yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Subscribers Section -->
+  <section class="admin-section mb-5">
+    <div class="admin-section-card">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h3 class="mb-0">Latest Subscribers</h3>
+        <a href="{{ url_for('admin_subscribers') }}" class="btn btn-sm admin-btn">View All Subscribers</a>
+      </div>
+      <p class="text-muted small mb-3">Recent emails subscribed to the newsletter.</p>
+
+      <table class="table table-striped admin-table mb-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Email</th>
+            <th>Subscribed At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in subscribers %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ s.email }}</td>
+              <td>{{ s.created_at }}</td>
+            </tr>
+          {% else %}
+            <tr><td colspan="3" class="text-center text-muted">No subscribers yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

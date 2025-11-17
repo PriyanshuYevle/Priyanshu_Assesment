@@ -1,0 +1,458 @@
+/* ============= GLOBAL ============= */
+
+body {
+  background-color: #f8f9fa;
+}
+
+.hero-title {
+  font-weight: 700;
+}
+
+/* ===========================
+      NAVBAR THEME (SOFT)
+   =========================== */
+
+.navbar {
+  background: #f4f5ff !important;         /* very soft lavender */
+  padding: 12px 22px;
+  border-bottom: 1px solid #dfe3ff;       /* subtle border */
+  box-shadow: 0 2px 10px rgba(111, 126, 255, 0.06);
+}
+
+/* Navbar Brand */
+.navbar-brand {
+  font-weight: 700;
+  color: #5f6bff !important;              /* soft indigo */
+  font-size: 1.4rem;
+  transition: color 0.3s ease, transform 0.25s ease;
+}
+
+.navbar-brand:hover {
+  transform: translateY(-2px);
+  color: #404bff !important;              /* slightly deeper */
+}
+
+/* Nav links */
+.navbar .nav-link {
+  font-weight: 500;
+  padding: 10px 16px;
+  color: #62667e !important;              /* soft grey-blue */
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+/* Hover Effect */
+.navbar .nav-link:hover {
+  background-color: rgba(95, 107, 255, 0.18);
+  color: #404bff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(95, 107, 255, 0.25);
+}
+
+/* Active Page */
+.navbar .nav-link.active {
+  background-color: #5f6bff !important;
+  color: white !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(95, 107, 255, 0.3);
+}
+
+/* Active Hover */
+.navbar .nav-link.active:hover {
+  background-color: #404bff !important;
+  transform: translateY(-2px);
+}
+
+/* Mobile toggle button */
+.navbar-toggler {
+  border: none;
+  background: #5f6bff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.navbar-toggler:hover {
+  transform: scale(1.05);
+  background: #404bff;
+}
+
+.navbar-toggler-icon {
+  filter: brightness(0) invert(1); /* makes icon white */
+}
+
+/* ============= HERO & SECTIONS (Landing) ============= */
+
+.hero-section {
+  border-radius: 16px;
+  padding: 40px 24px;
+  background: linear-gradient(135deg, #eef2ff, #ffffff); /* soft blue/lavender gradient */
+}
+
+.hero-cta,
+.hero-cta-secondary {
+  border-radius: 999px;
+}
+
+.hero-illustration .hero-placeholder {
+  border-radius: 16px;
+  background: #e0e5ff;
+  padding: 40px;
+  color: #343b8f;
+  font-weight: 600;
+}
+
+.section-header h2 {
+  font-weight: 600;
+}
+
+.section-subtitle {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* ============= PROJECT CARDS (Landing) ============= */
+
+.project-card {
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Fixed-size project image on top of card */
+.project-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  transition: transform 0.35s ease;
+}
+
+/* Hover animation for entire card */
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 22px rgba(31, 38, 135, 0.16);
+}
+
+/* Slight zoom on image when hovering */
+.project-card:hover img {
+  transform: scale(1.07);
+}
+
+/* ============= CLIENT CARDS & AVATAR (Landing) ============= */
+
+.client-card {
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Wrapper ensures perfect circle */
+.client-avatar-wrapper {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #dde1ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: transform 0.3s ease,
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
+}
+
+/* Perfect circle image inside */
+.client-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Hover effect only on the image circle */
+.client-card:hover .client-avatar-wrapper {
+  transform: scale(1.08);
+  box-shadow: 0 10px 20px rgba(31, 38, 135, 0.2);
+  border-color: #5f6bff;
+}
+
+/* Slight hover lift on the whole card */
+.client-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* ============= HORIZONTAL SCROLL CAROUSELS ============= */
+/* Used for both Projects and Happy Clients sections */
+
+.scroll-row-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.horizontal-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar styling (optional) */
+.horizontal-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+.horizontal-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+/* Individual card in the horizontal scroll row */
+.scroll-card {
+  width: 260px;
+  height: 350px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-radius: 10px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Keep text area from stretching card */
+.scroll-card .card-body {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+/* Clamp long descriptions to 3 lines */
+.card-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Scroll arrows */
+.scroll-arrow {
+  border: none;
+  background: #ffffff;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.scroll-arrow span {
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #5f6bff;
+}
+
+.scroll-arrow:hover {
+  background: #5f6bff;
+  transform: translateY(-1px);
+}
+
+.scroll-arrow:hover span {
+  color: #ffffff;
+}
+
+/* ============= CONTACT & NEWSLETTER (Landing) ============= */
+
+.contact-card,
+.newsletter-card {
+  border-radius: 16px;
+}
+
+.contact-card {
+  border-left: 4px solid #5f6bff;
+}
+
+/* ============= RESPONSIVE TWEAKS (Landing) ============= */
+
+@media (max-width: 576px) {
+  .scroll-card {
+    width: 220px;
+    height: 340px;
+  }
+
+  .client-avatar-wrapper {
+    width: 90px;
+    height: 90px;
+  }
+
+  .scroll-row-wrapper {
+    gap: 0.25rem;
+  }
+
+  .scroll-arrow {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ===========================
+   ADMIN DASHBOARD STYLES
+   =========================== */
+
+.admin-dashboard {
+  padding-top: 1.5rem;
+}
+
+/* Sections on admin dashboard */
+.admin-section {
+  margin-top: 2rem;
+}
+
+.admin-section-card {
+  background: #f6f7ff;                 /* very soft blue-lavender */
+  border-radius: 14px;
+  padding: 18px 18px 12px 18px;
+  box-shadow: 0 4px 12px rgba(31, 38, 135, 0.05);
+  border: 1px solid #dfe3ff;
+}
+
+/* Admin summary cards (if used anywhere else) */
+.admin-card {
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.admin-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 22px rgba(31, 38, 135, 0.15);
+  background: #eef1ff;
+}
+
+.admin-card h6 {
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.admin-card h3 {
+  font-weight: 700;
+  color: #5f6bff;
+}
+
+/* Admin buttons (soft indigo theme) */
+.admin-btn,
+.admin-dashboard a.btn,
+.admin-panel-btn {
+  background: #5f6bff;
+  color: #fff;
+  border-radius: 6px;
+  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.admin-btn:hover,
+.admin-dashboard a.btn:hover,
+.admin-panel-btn:hover {
+  background: #404bff;
+  transform: translateY(-2px);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(64, 75, 255, 0.35);
+}
+
+/* Edit / delete buttons */
+.btn-edit {
+  background-color: #5f6bff;
+  color: #fff;
+  border-radius: 4px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-edit:hover {
+  transform: scale(1.07);
+  box-shadow: 0 6px 12px rgba(64, 75, 255, 0.4);
+  background-color: #404bff;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 4px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-delete:hover {
+  transform: scale(1.07);
+  box-shadow: 0 6px 12px rgba(220, 53, 69, 0.4);
+  background-color: #b02a37;
+}
+
+/* Admin tables */
+.admin-table {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.admin-table thead th {
+  background-color: #7a86ff;          /* soft indigo header */
+  color: #ffffff;
+}
+
+.admin-table tbody tr:hover {
+  background-color: #eef1ff;          /* light soft hover */
+}
+
+/* For layouts with multiple cards */
+.admin-row {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* Admin table image styles */
+.admin-table img {
+  display: block;
+}
+
+/* Rectangular thumbnail for project images (admin) */
+.admin-thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.admin-thumb:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Circular thumbnail for client images (admin) */
+.admin-thumb-circle {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.admin-thumb-circle:hover {
+  transform: scale(1.12);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
