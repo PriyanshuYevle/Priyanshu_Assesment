@@ -60,6 +60,6 @@ def init_db():
 
 
 # Optional: run tests when executed directly
-if _name_ == "_main_":
+if __name__ == "_main_":
     if test_connection():
         init_db()
